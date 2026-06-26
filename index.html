@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainbow Archive // v2.0.6</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Retro Tech & Hand-drawn Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Gloria+Hallelujah&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Becky Font Fallback - If you have Becky.ttf, place it in your root folder */
+        @font-face {
+            font-family: 'Becky';
+            src: url('Becky.ttf') format('truetype');
+        }
+
+        :root {
+            --hot-pink: #ff80b3;
+            --archive-purple: #36255c; 
+            --window-bg: #fff1f2;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: #fce7f3;
+            background-image: radial-gradient(#db2777 0.85px, transparent 0.85px), radial-gradient(#db2777 0.85px, #fce7f3 0.85px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--archive-purple);
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden;
+            padding-bottom: 4rem;
+        }
+
+        /* HEADER: Compact & Rippling */
+        .header-title {
+            font-family: 'Becky', 'Gloria Hallelujah', cursive;
+            color: var(--archive-purple);
+            display: inline-block;
+            animation: inkRipple 5s ease-in-out infinite;
+            font-size: clamp(2.5rem, 8vw, 5rem); 
+            line-height: 1.2;
+        }
+
+        @keyframes inkRipple {
+            0%, 100% { transform: scale(1) rotate(0deg); filter: blur(0px); }
+            50% { transform: scale(1.02) rotate(0.3deg); filter: blur(0.2px); }
+        }
+
+        /* Nav Wiggle Hover */
+        @keyframes wiggle {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-4deg); }
+            75% { transform: rotate(4deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .nav-icon:hover .folder-img { animation: wiggle 0.3s ease-in-out infinite; }
+
+        /* Window Styling */
+        .archive-section {
+            background: var(--window-bg);
+            border: 3px solid var(--archive-purple);
+            box-shadow: 6px 6px 0px var(--archive-purple);
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 10;
+        }
+        .section-bar {
+            background: var(--archive-purple);
+            color: white;
+            padding: 8px 16px;
+            font-size: 10px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+            letter-spacing: 1px;
+        }
+
+        /* Horizontal Album Gallery */
+        .album-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--hot-pink) transparent;
+        }
+        .album-scroll::-webkit-scrollbar { height: 8px; }
+        .album-scroll::-webkit-scrollbar-thumb { background: var(--hot-pink); border-radius: 4px; }
+        
+        .album-item {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
+            background: white;
+            border: 2px solid var(--archive-purple);
+            padding: 0.5rem;
+            box-shadow: 4px 4px 0px var(--archive-purple);
+            transition: transform 0.2s;
+        }
+        .album-item:hover { transform: translateY(-4px); }
+
+        /* Contact Ribbon */
+        .contact-bar {
+            background: white;
+            border: 2px solid var(--archive-purple);
+            padding: 0.6rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            box-shadow: 4px 4px 0px var(--archive-purple);
+        }
+
+        .pink-star {
+            position: fixed;
+            pointer-events: none;
+            color: var(--hot-pink);
+            z-index: 0;
+            opacity: 0.7;
+        }
+
+        /* Back to Top Button */
+        #toTop {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            border: 2px solid var(--archive-purple);
+            color: var(--archive-purple);
+            padding: 8px 14px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+            box-shadow: 3px 3px 0px var(--archive-purple);
+        }
+        #toTop:hover { background: var(--hot-pink); color: white; }
+
+        /* Profile Image styling */
+        .profile-frame {
+            border: 3px solid var(--archive-purple);
+            box-shadow: 4px 4px 0px var(--hot-pink);
+            overflow: hidden;
+            background: white;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <button id="toTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">▲ TOP</button>
+
+    <!-- HEADER -->
+    <header class="text-center mb-16">
+        <h1 class="header-title">Rainbow Archive</h1>
+        
+        <nav class="flex flex-wrap justify-center gap-6 md:gap-14 mt-6">
+            <a href="#about" class="nav-icon flex flex-col items-center group">
+                <div class="folder-img text-4xl mb-2 transition-transform">📂</div>
+                <span class="text-[10px] font-bold tracking-tight opacity-70 group-hover:opacity-100">about.txt</span>
+            </a>
+            <a href="#projects" class="nav-icon flex flex-col items-center group">
+                <div class="folder-img text-4xl mb-2 transition-transform">💌</div>
+                <span class="text-[10px] font-bold tracking-tight opacity-70 group-hover:opacity-100">projects.exe</span>
+            </a>
+            <a href="#gallery" class="nav-icon flex flex-col items-center group">
+                <div class="folder-img text-4xl mb-2 transition-transform">🖼️</div>
+                <span class="text-[10px] font-bold tracking-tight opacity-70 group-hover:opacity-100">gallery.jpg</span>
+            </a>
+            <a href="#contact" class="nav-icon flex flex-col items-center group">
+                <div class="folder-img text-4xl mb-2 transition-transform">📞</div>
+                <span class="text-[10px] font-bold tracking-tight opacity-70 group-hover:opacity-100">contact.sys</span>
+            </a>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-4xl mx-auto relative z-10">
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="archive-section">
+            <div class="section-bar"><span>about.txt</span></div>
+            <div class="p-8 flex flex-col md:flex-row items-center gap-10 bg-white/60">
+                <!-- User Profile Image -->
+                <div class="profile-frame w-32 h-32 md:w-40 md:h-40 shrink-0">
+                    <img src="IMG_1231.jpeg" alt="Profile Photo" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="text-sm leading-relaxed">
+                    <p class="font-bold mb-2 text-pink-500">> system_status: awake & creative</p>
+                    <p>I am a visual narrator and developer interested in the intersection of retro technology and soft, organic aesthetics. This space serves as a chronological record of my digital gardens and artistic experiments.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS.EXE (MAIL CLUB) -->
+        <section id="projects" class="archive-section">
+            <div class="section-bar"><span>projects.exe</span></div>
+            <div class="p-2">
+                <div class="album-scroll">
+                    <div class="album-item">
+                        <div class="h-44 bg-pink-50 border-b border-[#36255c] mb-2 flex items-center justify-center text-4xl">💌</div>
+                        <p class="text-[10px] font-bold uppercase">Archive_Mail_Vol.01</p>
+                        <p class="text-[9px] opacity-60 mt-1">A monthly newsletter featuring pixel-art tutorials.</p>
+                    </div>
+                    <div class="album-item">
+                        <div class="h-44 bg-purple-50 border-b border-[#36255c] mb-2 flex items-center justify-center text-4xl">💭</div>
+                        <p class="text-[10px] font-bold uppercase">Dream_Logs_02</p>
+                        <p class="text-[9px] opacity-60 mt-1">Exploring the mechanics of digital nostalgia.</p>
+                    </div>
+                    <div class="album-item">
+                        <div class="h-44 bg-blue-50 border-b border-[#36255c] mb-2 flex items-center justify-center text-4xl">🐚</div>
+                        <p class="text-[10px] font-bold uppercase">Seaside_Protocol</p>
+                        <p class="text-[9px] opacity-60 mt-1">A sound-scape project inspired by the coast.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY.JPG -->
+        <section id="gallery" class="archive-section">
+            <div class="section-bar"><span>gallery.jpg</span></div>
+            <div class="p-2">
+                <div class="album-scroll">
+                    <div class="album-item">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=500&fit=crop" class="w-full h-64 object-cover border border-[#36255c] mb-2" alt="art">
+                        <p class="text-[10px] italic">Celestial_Glow.png</p>
+                    </div>
+                    <div class="album-item">
+                        <img src="https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=400&h=500&fit=crop" class="w-full h-64 object-cover border border-[#36255c] mb-2" alt="art">
+                        <p class="text-[10px] italic">Ozone_Bus_Stop.jpg</p>
+                    </div>
+                    <div class="album-item">
+                        <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=400&h=500&fit=crop" class="w-full h-64 object-cover border border-[#36255c] mb-2" alt="art">
+                        <p class="text-[10px] italic">Dream_Protocol.bmp</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT BAR -->
+        <section id="contact" class="flex justify-center mt-12">
+            <div class="contact-bar flex-wrap">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📸</span>
+                    <a href="#" class="text-[10px] font-bold border-b border-[#36255c] hover:text-[#ff80b3]">IG: @RAINBOW.ARCHIVE</a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📧</span>
+                    <a href="mailto:hello@rainbow.net" class="text-[10px] font-bold border-b border-[#36255c] hover:text-[#ff80b3]">MAIL: HELLO@RAINBOW.NET</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-24 text-center opacity-30 font-mono text-[9px] uppercase tracking-[0.2em]">
+        &copy; 2024 RAINBOW_ARCHIVE_NETWORK // v2.0.6
+    </footer>
+
+    <script>
+        // Back to Top button
+        const topBtn = document.getElementById("toTop");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                topBtn.style.display = "block";
+            } else {
+                topBtn.style.display = "none";
+            }
+        };
+
+        // Pink Drifting Stars
+        function createStar() {
+            const star = document.createElement('div');
+            star.innerHTML = '★';
+            star.className = 'pink-star';
+            
+            const startTop = Math.random() * window.innerHeight;
+            star.style.top = startTop + 'px';
+            star.style.left = '-40px';
+            
+            const size = 0.8 + Math.random() * 1.5;
+            star.style.transform = `scale(${size})`;
+            
+            document.body.appendChild(star);
+
+            const duration = 22000 + Math.random() * 18000;
+            const animation = star.animate([
+                { left: '-40px', opacity: 0 },
+                { left: '15%', opacity: 0.7 },
+                { left: '85%', opacity: 0.7 },
+                { left: (window.innerWidth + 40) + 'px', opacity: 0 }
+            ], { duration: duration, easing: 'linear' });
+
+            animation.onfinish = () => star.remove();
+        }
+
+        setInterval(createStar, 5500);
+        for(let i=0; i<3; i++) setTimeout(createStar, i * 2500);
+    </script>
+</body>
+</html>
